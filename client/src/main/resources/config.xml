@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="applicationContextProvder"
+          class="ru.geekbrains.ApplicationContextProvider"/>
+    <bean id="authService" class="ru.geekbrains.commands.AuthStatus" scope="prototype">
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+    <bean id="getFiles" class="ru.geekbrains.commands.GetFiles" scope="prototype">
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+    <bean id="clientFilePackageReader" class="ru.geekbrains.ClientFilePackageReader" scope="prototype">
+        <constructor-arg ref="serverHandler"/>
+    </bean>
+    <bean id="clientCommandPackageReader" class="ru.geekbrains.ClientCommandPackageReader" scope="prototype">
+        <constructor-arg ref="serverHandler"/>
+    </bean>
+    <bean id="serverHandler" class="ru.geekbrains.ServerHandler" scope="prototype">
+        <constructor-arg name="client">
+            <null/>
+        </constructor-arg>
+        <constructor-arg name="socket">
+            <null/>
+        </constructor-arg>
+    </bean>
+</beans>

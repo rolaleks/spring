@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="applicationContextProvder"
+          class="ru.geekbrains.ApplicationContextProvider"/>
+    <bean id="cloudServer"
+          class="ru.geekbrains.CloudServer">
+        <constructor-arg name="dbConnection" ref="dbConnection"/>
+    </bean>
+    <bean id="dbConnection"
+          class="ru.geekbrains.db.DbConnection">
+        <property name="url" value="jdbc:sqlite:DB.db"/>
+    </bean>
+    <bean id="authService" class="ru.geekbrains.commands.Auth" scope="prototype">
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+    <bean id="getFile" class="ru.geekbrains.commands.GetFile" scope="prototype">
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+    <bean id="getFiles" class="ru.geekbrains.commands.GetFiles" scope="prototype">
+        <constructor-arg>
+            <null/>
+        </constructor-arg>
+    </bean>
+    <bean id="serverFilePackageReader" class="ru.geekbrains.ServerFilePackageReader" scope="prototype">
+        <constructor-arg ref="serverHandler"/>
+    </bean>
+    <bean id="serverCommandPackageReader" class="ru.geekbrains.ServerCommandPackageReader" scope="prototype">
+        <constructor-arg ref="serverHandler"/>
+    </bean>
+    <bean id="serverHandler" class="ru.geekbrains.ClientHandler" scope="prototype">
+        <constructor-arg name="server">
+            <null/>
+        </constructor-arg>
+        <constructor-arg name="socket">
+            <null/>
+        </constructor-arg>
+    </bean>
+    <bean id="beanFactoryPostProcessor" class="ru.geekbrains.postprocessors.BeanFactoryPostProcessor"/>
+    <bean id="beanPostProcessor" class="ru.geekbrains.postprocessors.BeanPostProcessor"/>
+</beans>
