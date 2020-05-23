@@ -1,0 +1,21 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://138.201.89.175:3306/shop?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</property>
+        <property name="connection.username">geekbrains</property>
+        <property name="connection.password">geekbrains</property>
+        <property name="connection.pool_size">10</property>
+        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="show_sql">true</property>
+        <property name="current_session_context_class">thread</property>
+        <property name="hibernate.format_sql">true</property>
+
+        <mapping class="ru.geekbrains.hibernate.persist.User"/>
+        <mapping class="ru.geekbrains.hibernate.persist.Product"/>
+        <mapping class="ru.geekbrains.hibernate.persist.UserProduct"/>
+    </session-factory>
+</hibernate-configuration>
