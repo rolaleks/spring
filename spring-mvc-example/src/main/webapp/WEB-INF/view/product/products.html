@@ -44,6 +44,20 @@
         <div class="col-12">
             <a class="btn btn-primary" th:href="@{/product/create}">Add Product</a>
         </div>
+        <div class="col-12">
+            <form th:object="${search}">
+                <div class="form-group">
+                    <label for="minCost">Min Price</label>
+                    <input type="number" id="minCost" th:field="*{minCost}" class="form-control" placeholder="Enter min price">
+                </div>
+                <div class="form-group">
+                    <label for="maxCost">Max Price</label>
+                    <input type="number" id="maxCost" th:field="*{maxCost}" class="form-control" placeholder="Enter max price">
+                </div>
+                <button type="submit" class="btn btn-success">Search</button>
+            </form>
+
+        </div>
 
         <div class="col-12">
             <table class="table table-bordered my-2">
@@ -73,6 +87,17 @@
                 </tbody>
             </table>
         </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination" th:with="urlBuilder=${T(org.springframework.web.servlet.support.ServletUriComponentsBuilder)}">
+                <li class="page-item" th:if="${search.page > 1}"><a class="page-link" th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', search.page - 1).toUriString()}">Previous</a></li>
+                <li class="page-item" th:if="${search.page > 1}"><a class="page-link" th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', 1).toUriString()}" >1</a></li>
+                <li class="page-item" th:if="${search.page > 2}"><a class="page-link" href="javascript:void(0);" >...</a></li>
+                <li class="page-item"><a class="page-link" th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', search.page).toUriString()}" th:text="${search.page}">1</a></li>
+                <li class="page-item" th:if="${(search.page + 1) < search.totalPages}"><a class="page-link" href="javascript:void(0);" >...</a></li>
+                <li class="page-item" th:if="${search.page < search.totalPages}"><a class="page-link" th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', search.totalPages).toUriString()}" th:text="${search.totalPages}" >last</a></li>
+                <li class="page-item" th:if="${search.page < search.totalPages}"><a class="page-link" th:href="${urlBuilder.fromCurrentRequest().replaceQueryParam('page', search.page + 1).toUriString()}">Next</a></li>
+            </ul>
+        </nav>
     </div>
 </div>
 

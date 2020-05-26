@@ -1,31 +1,44 @@
 package ru.geekbrains.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.persist.enity.Product;
-import ru.geekbrains.persist.repo.ProductRepository;
+import ru.geekbrains.persist.service.interdafaces.ProductServerInterface;
+import ru.geekbrains.search.ProductSearch;
+
+import java.math.BigDecimal;
 
 @RequestMapping("/product")
 @Controller
 public class ProductsController {
 
 
-    private ProductRepository productRepository;
+    private ProductServerInterface productService;
 
     @Autowired
-    public ProductsController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public ProductsController(ProductServerInterface productService) {
+        this.productService = productService;
     }
 
     @GetMapping
-    public String products(Model model) {
+    public String products(Model model,
+                           @RequestParam(name = "minCost", required = false) BigDecimal minCost,
+                           @RequestParam(name = "maxCost", required = false) BigDecimal maxCost,
+                           @RequestParam(name = "page", required = false) Integer page,
+                           @RequestParam(name = "pageSize", required = false) Integer pageSize
+    ) {
+        ProductSearch search = new ProductSearch(minCost, maxCost);
+        search.setPage(page);
+        search.setPageSize(pageSize);
 
-        model.addAttribute("products", productRepository.findAll());
+        Page<Product> productPage = productService.findAll(search);
+        search.setTotalPages(productPage.getTotalPages());
+
+        model.addAttribute("search", search);
+        model.addAttribute("products", productPage.getContent());
         return "product/products";
     }
 
@@ -37,16 +50,16 @@ public class ProductsController {
     }
 
     @GetMapping("update/{id}")
-    public String update(Model model, @PathVariable String  id) {
+    public String update(Model model, @PathVariable String id) {
 
-        model.addAttribute("product", productRepository.findById(Long.parseLong(id)));
+        model.addAttribute("product", productService.findById(Long.parseLong(id)));
         return "product/form";
     }
 
     @GetMapping("delete/{id}")
-    public String delete(@PathVariable String  id) {
+    public String delete(@PathVariable String id) {
 
-        productRepository.delete(Long.valueOf(id));
+        productService.delete(Long.valueOf(id));
         return "redirect:/product";
     }
 
@@ -54,9 +67,9 @@ public class ProductsController {
     public String save(Product product) {
 
         if (product.getId() == null) {
-            productRepository.save(product);
+            productService.save(product);
         } else {
-            productRepository.update(product);
+            productService.update(product);
         }
         return "redirect:/product";
     }

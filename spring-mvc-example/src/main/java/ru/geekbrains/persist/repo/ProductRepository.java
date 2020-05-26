@@ -1,44 +1,20 @@
 package ru.geekbrains.persist.repo;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.geekbrains.persist.enity.Product;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class ProductRepository {
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    private final AtomicLong identityGen;
+    Page<Product> findByCostBetween(BigDecimal min, BigDecimal max, Pageable pageable);
 
-    private final Map<Long, Product> products;
+    Page<Product> findByCostGreaterThanEqual(BigDecimal cost, Pageable pageable);
 
-    public ProductRepository() {
-        this.identityGen = new AtomicLong(0);
-        this.products = new ConcurrentHashMap<>();
-    }
-
-    public List<Product> findAll() {
-        return new ArrayList<>(products.values());
-    }
-
-    public void save(Product product) {
-        product.setId(identityGen.incrementAndGet());
-        products.put(product.getId(), product);
-    }
-
-    public void update(Product product) {
-        products.put(product.getId(), product);
-    }
-
-    public void delete(Long id) {
-        products.remove(id);
-    }
-
-    public Product findById(long id) {
-        return products.get(id);
-    }
+    Page<Product> findByCostLessThanEqual(BigDecimal cost, Pageable pageable);
 }
