@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.geekbrains.persist.enity.User;
-import ru.geekbrains.persist.repo.UserRepository;
+import ru.geekbrains.persist.service.interdafaces.UserServerInterface;
 
 @RequestMapping("/user")
 @Controller
@@ -17,18 +17,18 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    private UserRepository userRepository;
+    private UserServerInterface userService;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserServerInterface userService) {
+        this.userService = userService;
     }
 
     @GetMapping
     public String userList(Model model) {
         logger.info("User list");
 
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "users";
     }
 
@@ -44,7 +44,7 @@ public class UserController {
     public String saveUser(User user) {
         logger.info("Save user method");
 
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/user";
     }
 }
