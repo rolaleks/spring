@@ -21,4 +21,6 @@ public interface ProductServerInterface {
 
     public void delete(Long id);
 
+    public boolean hasSameProduct(Product product);
+
 }
