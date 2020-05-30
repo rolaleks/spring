@@ -52,6 +52,11 @@ public class ProductService implements ProductServerInterface {
     public Page<Product> findAll(ProductSearch search) {
 
         Pageable pageable = search.getPageable();
+
+        if (search.getTitle() != null) {
+            return repository.findProductByParams(search.getMinCost(), search.getMaxCost(), search.getTitle(), pageable);
+        }
+
         if (search.getMinCost() != null && search.getMaxCost() != null) {
             return repository.findByCostBetween(search.getMinCost(), search.getMaxCost(), pageable);
         } else if (search.getMinCost() != null) {
@@ -61,6 +66,14 @@ public class ProductService implements ProductServerInterface {
         }
 
         return repository.findAll(pageable);
+    }
+
+    @Override
+    public boolean hasSameProduct(Product product) {
+
+        List<Product> products = repository.findByCostAndTitleAndIdNot(product.getCost(), product.getTitle(), product.getId());
+
+        return products.size() > 0;
     }
 
 }

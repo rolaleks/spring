@@ -1,6 +1,11 @@
 package ru.geekbrains.persist.enity;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
@@ -15,9 +20,13 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Length(min = 5, max = 32)
     @Column(nullable = false)
     private String title;
 
+    @DecimalMin("0.01")
+    @DecimalMax("10000000")
     @Column(nullable = false)
     private BigDecimal cost;
 

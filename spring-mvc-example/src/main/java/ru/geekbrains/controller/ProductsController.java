@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.geekbrains.persist.enity.Product;
 import ru.geekbrains.persist.service.interdafaces.ProductServerInterface;
 import ru.geekbrains.search.ProductSearch;
 
+import javax.validation.Valid;
 import java.math.BigDecimal;
 
 @RequestMapping("/product")
@@ -28,9 +30,10 @@ public class ProductsController {
                            @RequestParam(name = "minCost", required = false) BigDecimal minCost,
                            @RequestParam(name = "maxCost", required = false) BigDecimal maxCost,
                            @RequestParam(name = "page", required = false) Integer page,
-                           @RequestParam(name = "pageSize", required = false) Integer pageSize
+                           @RequestParam(name = "pageSize", required = false) Integer pageSize,
+                           @RequestParam(name = "title", required = false) String title
     ) {
-        ProductSearch search = new ProductSearch(minCost, maxCost);
+        ProductSearch search = new ProductSearch(minCost, maxCost, title);
         search.setPage(page);
         search.setPageSize(pageSize);
 
@@ -64,7 +67,16 @@ public class ProductsController {
     }
 
     @PostMapping
-    public String save(Product product) {
+    public String save(@Valid Product product, BindingResult bindingResult) {
+
+
+        if (productService.hasSameProduct(product)) {
+            bindingResult.rejectValue("title", "1", "Товар с такой стоимостью и названием уже существует");
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "product/form";
+        }
 
         if (product.getId() == null) {
             productService.save(product);

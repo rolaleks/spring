@@ -17,12 +17,15 @@ public class ProductSearch {
 
     private Integer totalPages;
 
+    private String title;
+
     public ProductSearch() {
     }
 
-    public ProductSearch(BigDecimal minCost, BigDecimal maxCost) {
+    public ProductSearch(BigDecimal minCost, BigDecimal maxCost, String title) {
         this.minCost = minCost;
         this.maxCost = maxCost;
+        this.title = title;
     }
 
     public BigDecimal getMinCost() {
@@ -67,5 +70,13 @@ public class ProductSearch {
 
     public Pageable getPageable() {
         return PageRequest.of(getPage() - 1, getPageSize());
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
