@@ -1,0 +1,45 @@
+GET http://127.0.0.1:8080/mvc-app/api/v1/product/all
+
+###
+
+GET http://127.0.0.1:8080/mvc-app/api/v1/product/50/id
+
+###
+
+POST http://127.0.0.1:8080/mvc-app/api/v1/product/
+Content-Type: application/json
+
+{
+    "title": "d t222",
+    "cost": 1250.0,
+    "description": "tempor incididunt ut labo"
+}
+
+
+###
+
+POST http://127.0.0.1:8080/mvc-app/api/v1/product/
+Content-Type: application/json
+
+{
+  "title": "d t222",
+  "cost": 1250.0,
+  "description": "tempor incididunt ut labo"
+}
+
+
+###
+
+PUT http://127.0.0.1:8080/mvc-app/api/v1/product/
+Content-Type: application/json
+
+{
+  "id": 500,
+  "title": "new prod",
+  "cost": 1999.00,
+  "description": "tempor incididunt ut lab o"
+}
+
+###
+
+DELETE http://127.0.0.1:8080/mvc-app/api/v1/product/50/id

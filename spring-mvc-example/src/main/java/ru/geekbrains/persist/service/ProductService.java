@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.persist.enity.Product;
+import ru.geekbrains.persist.repl.ProductMapper;
+import ru.geekbrains.persist.repl.ProductRepl;
 import ru.geekbrains.persist.repo.ProductRepository;
 import ru.geekbrains.persist.service.interdafaces.ProductServerInterface;
 import ru.geekbrains.search.ProductSearch;
@@ -24,8 +26,8 @@ public class ProductService implements ProductServerInterface {
     }
 
     @Transactional(readOnly = true)
-    public List<Product> findAll() {
-        return repository.findAll();
+    public List<ProductRepl> findAll() {
+        return ProductMapper.MAPPER.fromProductList(repository.findAll());
     }
 
     @Transactional
@@ -36,6 +38,17 @@ public class ProductService implements ProductServerInterface {
     @Transactional(readOnly = true)
     public Optional<Product> findById(long id) {
         return repository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<ProductRepl> findReplById(long id) {
+        Product p = repository.findById(id).orElse(null);
+        if (p != null) {
+            return Optional.of(ProductMapper.MAPPER.fromProduct(p));
+        }
+        ProductRepl repl = null;
+
+        return Optional.ofNullable(repl);
     }
 
     @Transactional
