@@ -1,8 +1,6 @@
 package ru.geekbrains.persist.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.geekbrains.persist.enity.User;
@@ -16,13 +14,10 @@ import java.util.Optional;
 public class UserService implements UserServerInterface {
 
     private UserRepository repository;
-    private BCryptPasswordEncoder passwordEncoder;
-
 
     @Autowired
     public UserService(UserRepository repository) {
         this.repository = repository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @Transactional(readOnly = true)
@@ -32,7 +27,6 @@ public class UserService implements UserServerInterface {
 
     @Transactional
     public void save(User user) {
-        //user.setPassword(passwordEncoder.encode(user.getPassword()));
         repository.save(user);
     }
 

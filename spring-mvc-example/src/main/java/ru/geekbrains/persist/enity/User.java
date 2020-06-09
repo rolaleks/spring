@@ -1,9 +1,6 @@
 package ru.geekbrains.persist.enity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,14 +17,6 @@ public class User {
     @Column(nullable = false)
     private String name;
 
-    @NotBlank
-    @Column(length = 128, nullable = false)
-    private String password;
-
-    @JsonIgnore
-    @Transient
-    private String repeatPassword;
-
     @OneToMany(mappedBy = "user")
     private Set<UserProduct> userProduct = new HashSet<UserProduct>();
 
@@ -38,12 +27,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private List<Role> roles;
 
     public User() {
     }
@@ -86,30 +69,6 @@ public class User {
 
     public void setProducts(List<Product> products) {
         this.products = products;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRepeatPassword() {
-        return repeatPassword;
-    }
-
-    public void setRepeatPassword(String repeatPassword) {
-        this.repeatPassword = repeatPassword;
     }
 
     @Override
