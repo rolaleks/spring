@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <!-- Required meta tags -->
@@ -41,7 +41,7 @@
 
 <div class="container">
     <div class="row py-2">
-        <div class="col-12">
+        <div class="col-12" sec:authorize="hasRole('SUPERADMIN')">
             <a class="btn btn-primary" th:href="@{/user/new}">Add User</a>
         </div>
 
@@ -62,7 +62,7 @@
                     <th scope="row" th:text="${user.id}">1</th>
                     <td th:text="${user.name}">Alex</td>
                     <td>
-                        <a class="btn btn-success" href="#"><i class="fas fa-edit"></i></a>
+                        <a class="btn btn-success" th:href="@{/user/update/{id}(id=${user.id})}"><i class="fas fa-edit"></i></a>
                         <a class="btn btn-danger" href="#"><i class="far fa-trash-alt"></i></a>
                     </td>
                 </tr>
